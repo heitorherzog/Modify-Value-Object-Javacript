@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <script>
+    const obj = {
+      aProperty: {
+        aSetting1: 1,
+        aSetting2: 2,
+        aSetting3: 3,
+        aSetting4: 4,
+        aSetting5: 5,
+      },
+      bProperty: {
+        bSetting1: {
+          bPropertySubSetting: true,
+          dPropertySubSetting: {
+            dProperty: {
+              dSetting1: 11,
+              dSetting2: 22,
+              dSetting3: 33,
+              dSetting4: 44,
+              dSetting5: 55,
+            },
+          },
+        },
+        bSetting2: "bString",
+      },
+      cProperty: {
+        cSetting: "cString",
+      },
+    };
+
+    SetValue(
+      obj,
+      "bProperty.bSetting1.dPropertySubSetting.dProperty.dSetting1",
+      1000
+    );
+
+    function SetValue(obj, path, newVal) {
+      let index = 0;
+      const parts = path.split(".");
+      const pathSize = parts.length;
+      const key = parts[pathSize - 1];
+
+      let retorno = getObjects(obj, key, newVal, index, pathSize);
+      console.log(retorno);
+    }
+
+    function getObjects(obj, key, newVal, index, pathSize) {
+      for (var i in obj) {
+        if (!obj.hasOwnProperty(i)) continue;
+
+        if (typeof obj[i] == "object") {
+          getObjects(obj[i], key, newVal, ++index, pathSize);
+        } else if (isArray(obj[i])) {
+          throw Error();
+          //traverseArray
+        } else if (i == key && index == pathSize) {
+          obj[key] = newVal;
+        }
+      }
+      return obj;
+    }
+
+    function isArray(o) {
+      return Object.prototype.toString.call(o) === "[object Array]";
+    }
+    function traverse(x) {
+      if (Object.keys(x).includes(keyarray[index])) {
+        if (keycounts === index) {
+          console.log("--------");
+        }
+        texto += keyarray[index] + ".";
+        index++;
+      }
+
+      if (isArray(x)) {
+        traverseArray(x);
+      } else if (typeof x === "object" && x !== null) {
+        traverseObject(x);
+      } else {
+      }
+    }
+
+    function traverseArray(arr) {
+      arr.forEach(function (x) {
+        traverse(x);
+      });
+    }
+
+    function traverseObject(obj) {
+      for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          traverse(obj[key]);
+        }
+      }
+    }
+  </script>
+
+  <body></body>
+</html>
